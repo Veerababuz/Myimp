@@ -1,0 +1,35 @@
+---
+- name: This playbook is to insatall jenkins
+  hosts: all
+  become: tre
+  tasks:
+    - name: to install java
+      yum:
+        name: java
+        state: installed
+
+    - name: to install wget
+      yum:
+        name: wget
+        state: installed
+
+    - name: download jenkins
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+
+    - name: adding jenkind key
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+    - name: insatll jenkins
+      yum:
+        name: jenkins
+        state: installed
+
+    - name: start jenkins service
+      service:
+        name: jenkins
+        state: present
+        enabled: yes
